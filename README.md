@@ -11,4 +11,3 @@
 ### Run Step
  1. python getFeature.py
  2. python main.py
-    
