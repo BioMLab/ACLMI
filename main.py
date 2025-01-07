@@ -130,11 +130,13 @@ class MyDataset(Dataset):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='args')
+    parser.add_argument('--seed', dest='seed', default=42, type=int, help='Random seed')
     parser.add_argument('--lr', dest='lr', default=0.001, type=float)
     parser.add_argument('--wd', dest='wd', default=5e-4, type=float)
     parser.add_argument('--epoch', dest='epoch', default=100, type=int, help='Training epochs')
     parser.add_argument('--dropout', dest='dropout', default=0.2, type=int, help='dropout')
     args = parser.parse_args()
+    torch.random.manual_seed(args.seed)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f'Using device: {device}')
 
@@ -163,8 +165,8 @@ if __name__ == '__main__':
     dataset = MyDataset(GCN_features_mi, transformer_features_mi, GCN_features_lnc, transformer_features_lnc, labels)
     print("Data already load")
 
-    # kfold = KFold(n_splits=5, shuffle=True)
-    kfold = StratifiedKFold(n_splits=5, shuffle=True)
+    # kfold = KFold(n_splits=5, shuffle=True, random_state=args.seed)
+    kfold = StratifiedKFold(n_splits=5, shuffle=True, random_state=args.seed)
     fold_metrics = []
     best_metrics_per_fold = []
     val_datasets = []
